@@ -69,4 +69,9 @@ class UserFactory extends Factory
             'ownedTeams'
         );
     }
+
+    public function admin(): static
+    {
+        return $this->afterCreating(fn (User $user) => $user->update(['is_admin' => true]));
+    }
 }

@@ -41,15 +41,40 @@ const logout = () => {
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
+                                <Link :href="route('quiz.index')">
                                     <ApplicationMark class="block h-9 w-auto" />
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
+                                <NavLink :href="route('quiz.index')" :active="route().current('quiz.index')">
+                                    Home
+                                </NavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink :href="route('questions.index')" :active="route().current('questions.index')">
+                                    Questions
+                                </NavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink :href="route('quizzes.index')" :active="route().current('quizzes.index')">
+                                    Quizzes
+                                </NavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex" v-if="$page.props.auth.user">
+                                <NavLink :href="route('tests')" :active="route().current('tests')">
+                                    Tests
+                                </NavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex" v-if="$page.props.auth.user">
+                                <NavLink :href="route('leaderboard.index')" :active="route().current('leaderboard.index')">
+                                    Leaderboard
+                                </NavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex" v-if="$page.props.auth.user">
+                                <NavLink :href="route('results.index')" :active="route().current('results.index')">
+                                    My Results
                                 </NavLink>
                             </div>
                         </div>
@@ -117,7 +142,7 @@ const logout = () => {
 
                             <!-- Settings Dropdown -->
                             <div class="ml-3 relative">
-                                <Dropdown align="right" width="48">
+                                <Dropdown align="right" width="48" v-if="$page.props.auth.user">
                                     <template #trigger>
                                         <button v-if="$page.props.jetstream.managesProfilePhotos" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                                             <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
@@ -158,6 +183,14 @@ const logout = () => {
                                         </form>
                                     </template>
                                 </Dropdown>
+                                <div v-else>
+                                    <NavLink :href="route('login')" :active="route().current('login')">
+                                        Log In
+                                    </NavLink>
+                                    <NavLink :href="route('register')" :active="route().current('register')">
+                                        Register
+                                    </NavLink>
+                                </div>
                             </div>
                         </div>
 
@@ -193,14 +226,14 @@ const logout = () => {
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                        <ResponsiveNavLink :href="route('quiz.index')" :active="route().current('quiz.index')">
+                            Home
                         </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
                     <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-                        <div class="flex items-center px-4">
+                        <div class="flex items-center px-4" v-if="$page.props.auth.user">
                             <div v-if="$page.props.jetstream.managesProfilePhotos" class="shrink-0 mr-3">
                                 <img class="h-10 w-10 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
                             </div>
