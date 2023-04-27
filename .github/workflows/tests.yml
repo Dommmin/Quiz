@@ -1,0 +1,35 @@
+name: Laravel Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, pdo_mysql
+
+      - name: Copy .env file
+        run: cp .env.example .env
+        
+      - name: Install dependencies
+        run: composer install
+        
+      - name: Install NPM
+        run: npm install && npm run build
+
+      - name: Generate Laravel app key
+        run: php artisan key:generate --show
+        id: key
+
+      - name: Set Laravel app key
+        run: echo "APP_KEY=$(php artisan key:generate --show)" >> $GITHUB_ENV
+
+      - name: Run tests
+        run: ./vendor/bin/pest --parallel --coverage
